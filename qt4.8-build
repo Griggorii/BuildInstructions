@@ -117,4 +117,120 @@
 
 Удаление отладочной информации:
     ls -1 /usr/local/qt486-debug/bin/* | xargs -i sudo strip --strip-all {}
+    
+    _________________________________________________________________________________________________________________________________________________
+    
+ Griggorii продолжение холивара и демонстрирование что qt4.8.7 возможно и на   20.04 видео https://github.com/Griggorii/chromium-browser_setting_linux_3.0_chrome_chromium_flags_Command-Line/blob/main/Chromium%20notify%20budgie-panel%20support%20wayland.webm
+ 
+ Ставим деплои бустрап пакеты
+ 
+ sudo apt install autoconf automake autopoint autotools-dev debhelper dh-autoreconf dh-strip-nondeterminism dwz freetds-common freetds-dev gir1.2-gtk-2.0 icu-devtools libarchive-cpio-perl libasound2-dev libatk1.0-dev libaudio-dev libaudio2 libblkid-dev libbrotli-dev libcairo-script-interpreter2 libcairo2-dev libct4 libcups2-dev libcupsfilters-dev libcupsimage2-dev libdatrie-dev libdbus-1-dev libdebhelper-perl libegl-dev libexpat1-dev libffi-dev libfile-stripnondeterminism-perl libfontconfig1-dev libfreetype-dev libfreetype6-dev libfribidi-dev libgdk-pixbuf2.0-dev libgl-dev libgl1-mesa-dev libgles-dev libgles1 libglib2.0-dev libglib2.0-dev-bin libglu1-mesa-dev libglvnd-dev libglx-dev libgraphite2-dev libgtk2.0-dev libharfbuzz-dev libharfbuzz-gobject0 libice-dev libicu-dev libjbig-dev libjpeg-dev libjpeg-turbo8-dev libjpeg8-dev liblcms2-dev libltdl-dev liblzma-dev libmail-sendmail-perl libmng-dev libmount-dev libmysqlclient-dev libncurses-dev libodbc1 libopengl-dev libopengl0 libpam0g-dev libpango1.0-dev libpcre16-3 libpcre2-dev libpcre2-posix2 libpcre3-dev libpcre32-3 libpcrecpp0v5 libpixman-1-dev libpng-dev libpng-tools libpq-dev libpq5 libpthread-stubs0-dev libreadline-dev libselinux1-dev libsepol1-dev libsm-dev libsqlite3-dev libsub-override-perl libsybdb5 libsys-hostname-long-perl libthai-dev libtiff-dev libtiffxx5 libtool libx11-dev libxau-dev libxcb-render0-dev libxcb-shm0-dev libxcb1-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxdmcp-dev libxext-dev libxfixes-dev libxft-dev libxi-dev libxinerama-dev libxml2-dev libxml2-utils libxmu-dev libxmu-headers libxrandr-dev libxrender-dev libxslt1-dev libxt-dev libxtst-dev libxv-dev odbcinst odbcinst1debian2 pango1.0-tools pkg-kde-tools po-debconf unixodbc-dev uuid-dev x11proto-core-dev x11proto-dev x11proto-input-dev x11proto-randr-dev x11proto-record-dev x11proto-xext-dev x11proto-xinerama-dev xorg-sgml-doctools xtrans-dev
+ 
+ Скачиваем исходник допустим для 18.04 обычно это qt4.8.7 до того как шрифты стали толстыми и лже девелоперы сытыми
+ 
+ Заходим в debain и правим rules заменяя все флаги
+ 
+ 	./configure -confirm-license \
+	            -prefix "/usr" \
+	            -bindir "/usr/lib/$(DEB_HOST_MULTIARCH)/qt4/bin" \
+	            -libdir "/usr/lib/$(DEB_HOST_MULTIARCH)" \
+	            -docdir "/usr/share/qt4/doc" \
+	            -headerdir "/usr/include/qt4" \
+	            -datadir "/usr/share/qt4" \
+	            -plugindir "/usr/lib/$(DEB_HOST_MULTIARCH)/qt4/plugins" \
+	            -importdir "/usr/lib/$(DEB_HOST_MULTIARCH)/qt4/imports" \
+	            -translationdir "/usr/share/qt4/translations" \
+	            -sysconfdir "/etc/xdg" \
+	            -demosdir "/usr/lib/qt4/demos" \
+	            -examplesdir "/usr/lib/qt4/examples" \
+	            -opensource \
+	            -fast \
+	            -xmlpatterns \
+	            -no-multimedia \
+	            -audio-backend \
+	            -no-phonon \
+	            -no-phonon-backend \
+	            -svg \
+	            -webkit \
+	            -script \
+	            -scripttools \
+	            -system-zlib \
+	            -system-libtiff \
+	            -system-libpng \
+	            -system-libjpeg \
+	            -no-rpath \
+	            -optimized-qmake \
+	            -dbus-linked \
+	            -reduce-relocations \
+	            -no-separate-debug-info \
+	            -verbose \
+	            -gtkstyle \
+	            -system-nas-sound \
+                    -no-openvg \
+	            -lfontconfig \
+	            -I/usr/include/freetype2 \
+                    -no-openssl \
+	            -qvfb \
+                    -no-icu \
+	            $(extra_configure_opts)
+                
+  Сохраняем выходим
+  
+  Если не получилось второй вариант без gtkstyle
+  
+  ./configure -nokia-developer \
+    -prefix "/usr" \
+    -bindir "/usr/bin" \
+    -libdir "/usr/lib/x86_64-linux-gnu" \
+    -docdir "/usr/share/qt4/doc" \
+    -headerdir "/usr/include/qt4" \
+    -datadir "/usr/share/qt4" \
+    -plugindir "/usr/lib/x86_64-linux-gnu/qt4/plugins" \
+    -importdir "/usr/lib/x86_64-linux-gnu/qt4/imports" \
+    -translationdir "/usr/share/qt4/translations" \
+    -sysconfdir "/etc/xdg" \
+    -arch linux-any \
+    -xplatform linux-g++ \
+    -fast \
+    -mitshm \
+    -optimized-qmake \
+    -reduce-relocations \
+    -no-separate-debug-info \
+    -system-zlib \
+    -system-libtiff \
+    -system-libpng \
+    -system-libjpeg \
+    -no-nas-sound \
+    -no-qt3support \
+    -no-libmng \
+    -opengl es2 \
+    -accessibility \
+    -make tools \
+    -nomake examples \
+    -nomake demos \
+    -little-endian \
+    -I${TOOLCHAIN_PATH}/libc/usr/include/freetype2 \
+    -lfontconfig \
+    -cups \
+    -no-gtkstyle \
+    -exceptions \
+    -no-xinerama \
+    -no-xcursor \
+    -dbus \
+    -glib \
+    -no-pch \
+    -no-gstreamer \
+    -svg \
+    -webkit \
+    -no-sql-ibase \
+    -xmlpatterns \
+    -system-sqlite \
+    -plugin-sql-sqlite \
+    -openssl \
+    -icu \
+    -DQT_QLOCALE_USES_FCVT \
+    "$@"
+ 
+ 
+    
 
